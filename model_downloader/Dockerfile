@@ -1,6 +1,5 @@
 FROM python:3-slim
-COPY main.py .
-COPY requirements.txt .
+COPY app .
 RUN pip install -U pip
 RUN pip install -r requirements.txt
 RUN rm -rf .cache/pip
