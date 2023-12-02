@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: model-download
+spec:
+  template:
+    spec:
+      containers:
+      - name: model-downloader
+        image: ghcr.io/brianlechthaler/llama-k8s/model_downloader:main
+        volumeMounts:
+          - name: model_storage
+            mountPath: /opt/model
+        resources:
+          limits:
+            cpu: 8
+            memory: 16Gi
+        env:
+          - name: HF_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: hf_token-secret
+                key: hf_token
+      volumes:
+        - name: model_storage
+          persistentVolumeClaim:
+            claimName: model-storage-claim
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/region
+                operator: In
+                values:
+                  - ORD1
+      restartPolicy: Never
+  backoffLimit: 1
