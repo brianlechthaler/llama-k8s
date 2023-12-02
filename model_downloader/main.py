@@ -1,7 +1,5 @@
 from huggingface_hub import snapshot_download
-from os import symlink, environ
-from getpass import getuser
-
+from os import environ
 
 hardcoded_version: str = '1c86eca4355ecc3e955a70198a7067da7858cec6'
 hardcoded_model: str = 'Llama-2-70b-chat'
