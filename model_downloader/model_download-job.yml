@@ -9,7 +9,7 @@ spec:
       - name: model-downloader
         image: ghcr.io/brianlechthaler/llama-k8s/model_downloader:main
         volumeMounts:
-          - name: model_storage
+          - name: model-storage
             mountPath: /opt/model
         resources:
           limits:
@@ -22,7 +22,7 @@ spec:
                 name: hf-token-secret
                 key: hf_token
       volumes:
-        - name: model_storage
+        - name: model-storage
           persistentVolumeClaim:
             claimName: model-storage-claim
       affinity:
