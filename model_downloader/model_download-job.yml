@@ -19,7 +19,7 @@ spec:
           - name: HF_TOKEN
             valueFrom:
               secretKeyRef:
-                name: hf_token-secret
+                name: hf-token-secret
                 key: hf_token
       volumes:
         - name: model_storage
