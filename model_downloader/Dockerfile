@@ -1,4 +1,4 @@
-FROM python:3-slim
+FROM python:3.9.18-alpine3.18
 COPY app .
 RUN pip install -U pip
 RUN pip install -r requirements.txt
