@@ -8,6 +8,7 @@ spec:
       containers:
       - name: model-downloader
         image: ghcr.io/brianlechthaler/llama-k8s/model_downloader:main
+        imagePullPolicy: Always
         volumeMounts:
           - name: model-storage
             mountPath: /opt/model
