@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: converter
+spec:
+  template:
+    spec:
+      containers:
+      - name: model-downloader
+        image: ghcr.io/brianlechthaler/llama-k8s/converter:main
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: model-storage
+            mountPath: /opt/model
+        resources:
+          limits:
+            cpu: 16
+            memory: 32Gi
+      volumes:
+        - name: model-storage
+          persistentVolumeClaim:
+            claimName: model-storage-claim
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/region
+                operator: In
+                values:
+                  - ORD1
+      restartPolicy: OnFailure
+  backoffLimit: 10
