@@ -40,4 +40,4 @@ spec:
                 values:
                   - ORD1
       restartPolicy: OnFailure
-  backoffLimit: 1
+  backoffLimit: 10
