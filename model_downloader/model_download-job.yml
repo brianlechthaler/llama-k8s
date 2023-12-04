@@ -12,7 +12,7 @@ spec:
           - name: model-storage
             mountPath: /opt/model
           - name: model-cache
-            mountPath: /root/.cache/huggingface
+            mountPath: /opt/model_cache
         resources:
           limits:
             cpu: 8
