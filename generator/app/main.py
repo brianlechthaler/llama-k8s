@@ -6,9 +6,9 @@ class InferMixins:
     def load_model(self,model_path: str = '/var/model/ggml-model-f16.gguf', gpu: bool = True):
         self.ngpu = 0
         if gpu == True:
-            ngpu = -1
+            self.ngpu = -1
         self.model = Llama(model_path=model_path,
-                           n_gpu_layers=ngpu)
+                           n_gpu_layers=self.ngpu)
     def run_prompt(self, prompt: str = 'Name the planets in the solar system?'):
         self.output = self.model(f"Q: {prompt} A: ",
                           max_tokens=0,
