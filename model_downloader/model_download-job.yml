@@ -39,5 +39,5 @@ spec:
                 operator: In
                 values:
                   - ORD1
-      restartPolicy: Never
+      restartPolicy: OnFailure
   backoffLimit: 1
