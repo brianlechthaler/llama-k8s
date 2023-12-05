@@ -7,6 +7,7 @@ spec:
     spec:
       containers:
         - image: ghcr.io/brianlechthaler/llama-k8s/generator:main
+          imagePullPolicy: Always
           env:
             - name: APP_PORT
               value: "8080"
