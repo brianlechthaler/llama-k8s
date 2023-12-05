@@ -1,6 +1,7 @@
 from llama_cpp import Llama
 from sys import argv
 from os import environ
+from flask import Flask, request
 
 
 class InferMixins:
@@ -45,16 +46,17 @@ class InferMain(InferMixins):
         self.load_model(model_path, gpu)
 
 
+app = Flask(__name__)
+
+
+@app.route('/', methods=['POST'])
+def serve_buffer():
+    infer = InferMain()
+    infer.run_prompt(request.form.get('prompt'))
+    return infer.stream_to_buffer()
+
+
 if __name__ == '__main__':
-    x = InferMain()
-    prompt_run = False
-    if len(argv) > 1:
-        x.run_prompt(argv[1])
-        prompt_run = True
-    if prompt_run is False:
-        x.run_prompt(environ['PROMPT'])
-        prompt_run = True
-    if prompt_run is False:
-        raise Exception('NO PROMPT: Please specify a prompt using a command line argument or the PROMPT env var.')
-    if prompt_run is True:
-        x.stream_output()
+    app.run(debug=True,
+            host='0.0.0.0',
+            port=int(environ.get('PORT', 8080)))
