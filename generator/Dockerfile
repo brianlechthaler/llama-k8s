@@ -1,4 +1,4 @@
-ARG CUDA_IMAGE="12.1.1-devel-ubuntu22.04"
+ARG CUDA_IMAGE="11.8.0-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
 
 RUN apt-get update && apt-get upgrade -y \
