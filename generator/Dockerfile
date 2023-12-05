@@ -1,4 +1,5 @@
-FROM ghcr.io/coreweave/ml-containers/torch:29c37fa-nccl-cuda12.1.1-nccl2.18.3-1-torch2.0.1-vision0.15.2-audio2.0.2
+ARG CUDA_IMAGE="11.7.1-devel-ubuntu22.04"
+FROM nvidia/cuda:${CUDA_IMAGE}
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y git build-essential \
