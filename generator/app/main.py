@@ -46,11 +46,11 @@ class InferMain(InferMixins):
 
 
 app = Flask(__name__)
+infer = InferMain()
 
 
 @app.route('/', methods=['POST'])
 def serve_buffer():
-    infer = InferMain()
     infer.run_prompt(request.form.get('prompt'))
     return infer.stream_to_buffer()
 
