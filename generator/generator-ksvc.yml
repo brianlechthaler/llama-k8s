@@ -1,0 +1,34 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: generator
+spec:
+  template:
+    spec:
+      containers:
+        - image: ghcr.io/brianlechthaler/llama-k8s/generator:main
+          env:
+            - name: LISTEN_PORT
+              value: "8080"
+          resources:
+            limits:
+              cpu: 8
+              memory: 16Gi
+              nvidia.com/gpu: 3
+          volumes:
+            - name: model-storage
+              persistentVolumeClaim:
+                claimName: model-storage-claim
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: topology.kubernetes.io/region
+                        operator: In
+                        values:
+                          - ORD1
+                      - key: gpu.nvidia.com/class
+                        operator: In
+                        values:
+                          - A40
