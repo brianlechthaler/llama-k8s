@@ -28,6 +28,15 @@ class InferMixins:
         for token in self.output:
             self.print_token(token)
 
+    def stream_to_buffer(self):
+        buffer = ''
+        ntoken = 0
+        for token in self.output:
+            buffer += token
+            ntoken += 1
+        print(f"Generated {ntoken} Tokens")
+        return buffer
+
 
 class InferMain(InferMixins):
     def __init__(self,
