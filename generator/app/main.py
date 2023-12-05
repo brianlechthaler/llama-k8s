@@ -32,7 +32,7 @@ class InferMixins:
         buffer = ''
         ntoken = 0
         for token in self.output:
-            buffer += token
+            buffer += self.extract_outupt(token)
             ntoken += 1
         print(f"Generated {ntoken} Tokens")
         return buffer
