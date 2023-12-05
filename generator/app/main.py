@@ -1,5 +1,4 @@
 from llama_cpp import Llama
-from sys import argv
 from os import environ
 from flask import Flask, request
 
