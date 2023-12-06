@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generator-a100
+  labels:
+    app: generator-a100
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generator-a100
+  template:
+    metadata:
+      name: generator-a100
+      labels:
+        app: generator-a100
+    spec:
+      containers:
+        - name: generator
+          image: ghcr.io/brianlechthaler/llama-k8s/generator:main
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: model-storage
+              mountPath: /var/model
+          env:
+            - name: APP_PORT
+              value: "8080"
+            - name: EXEC_PORT
+              value: "8080"
+          resources:
+            limits:
+              cpu: 8
+              memory: 16Gi
+              nvidia.com/gpu: 3
+      volumes:
+        - name: model-storage
+          persistentVolumeClaim:
+            claimName: model-storage-claim
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                      - ORD1
+                  - key: gpu.nvidia.com/class
+                    operator: In
+                    values:
+                      - A100_PCIE_80GB
+      restartPolicy: Always
