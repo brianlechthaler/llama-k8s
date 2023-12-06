@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: generator
+  name: generator-a40
   labels:
-    app: generator
+    app: generator-a40
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: generator
+      app: generator-a40
   template:
     metadata:
-      name: generator
+      name: generator-a40
       labels:
-        app: generator
+        app: generator-a40
     spec:
       containers:
         - name: generator
