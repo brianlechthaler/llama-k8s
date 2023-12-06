@@ -51,8 +51,11 @@ infer = InferMain()
 
 @app.route('/', methods=['POST'])
 def serve_buffer():
+    app.logger.info(f"Running prompt: {request.form.get('prompt')}")
     infer.run_prompt(request.form.get('prompt'))
-    return infer.stream_to_buffer()
+    generated_text = infer.stream_to_buffer()
+    app.logger.info(f"Generated text: {generated_text}")
+    return generated_text
 
 
 if __name__ == '__main__':
