@@ -9,9 +9,6 @@ spec:
       - name: create-bucket
         image: ghcr.io/brianlechthaler/llama-k8s/uploader:main
         imagePullPolicy: Always
-        volumeMounts:
-          - name: model-storage
-            mountPath: /opt/model
         resources:
           limits:
             cpu: 16
@@ -24,10 +21,6 @@ spec:
                 key: name
         command: ["s3cmd"]
         args: ["mb","s3://$(BUCKET_NAME)"]
-      volumes:
-        - name: model-storage
-          persistentVolumeClaim:
-            claimName: model-storage-claim
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
