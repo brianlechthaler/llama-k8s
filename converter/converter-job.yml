@@ -6,7 +6,7 @@ spec:
   template:
     spec:
       containers:
-      - name: model-downloader
+      - name: converter
         image: ghcr.io/brianlechthaler/llama-k8s/converter:main
         imagePullPolicy: Always
         volumeMounts:
