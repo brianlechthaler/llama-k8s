@@ -28,6 +28,6 @@ spec:
               - key: topology.kubernetes.io/region
                 operator: In
                 values:
-                  - ORD1
+                  - LAS1
       restartPolicy: OnFailure
   backoffLimit: 10

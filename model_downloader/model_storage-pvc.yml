@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: model-storage-claim
 spec:
-  storageClassName: block-nvme-ord1
+  storageClassName: block-nvme-las1
   accessModes:
     - ReadWriteOnce
   resources:
