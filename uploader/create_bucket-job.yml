@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-bucket
+spec:
+  template:
+    spec:
+      containers:
+      - name: create-bucket
+        image: ghcr.io/brianlechthaler/llama-k8s/uploader:main
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: model-storage
+            mountPath: /opt/model
+        resources:
+          limits:
+            cpu: 16
+            memory: 32Gi
+        env:
+          - name: BUCKET_NAME
+            valueFrom:
+              secretKeyRef:
+                name: s3-bucket
+                key: name
+        command: ["s3cmd"]
+        args: ["mb","s3://$(BUCKET_NAME)"]
+      volumes:
+        - name: model-storage
+          persistentVolumeClaim:
+            claimName: model-storage-claim
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/region
+                operator: In
+                values:
+                  - LAS1
+      restartPolicy: OnFailure
+  backoffLimit: 10
