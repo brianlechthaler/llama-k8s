@@ -22,7 +22,7 @@ spec:
           - name: BUCKET_REGION
             value: "las1"
         command: ["s3cmd"]
-        args: ["mb","--endpoint-url=https://object.$(BUCKET_REGION).coreweave.com","s3://$(BUCKET_NAME)"]
+        args: ["mb","--endpoint-url=https://accel-object.$(BUCKET_REGION).coreweave.com","s3://$(BUCKET_NAME)"]
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
