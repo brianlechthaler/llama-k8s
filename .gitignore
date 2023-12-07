@@ -137,3 +137,7 @@ cache/
 # Sphinx Documentation
 _apidoc/
 _build/
+
+# Customized k8s secrets
+*-secret.yml
+*-secret.yaml
