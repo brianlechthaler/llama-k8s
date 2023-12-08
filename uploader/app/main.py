@@ -17,7 +17,13 @@ class Uploader:
         print(f"Bucket created: {response}")
 
     def upload_file(self):
-        response = self.s3_client.upload_file(environ['FILE_PATH'], environ['BUCKET_NAME'], environ['FILE_NAME'])
+        with open('FILE_PATH') as file:
+            response = client.put_object(
+                Bucket=environ['BUCKET_NAME'],
+                Key=environ['FILE_NAME'],
+                Body=file,
+                ACL='private'
+            )
         print(f"Uploaded file: {response}")
 
     def cli_handler(self, operation):
