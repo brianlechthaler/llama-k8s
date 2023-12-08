@@ -34,7 +34,7 @@ class Uploader:
             self.create_bucket()
         if operation == 'upload_file':
             self.upload_file()
-        if operation is not in ['create_bucket','upload_file']:
+        if operation not in ['create_bucket', 'upload_file']:
             raise Exception("Invalid operation or no operation specified.")
 
 
