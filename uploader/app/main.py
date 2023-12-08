@@ -33,7 +33,7 @@ class Uploader:
                 Key=environ['FILE_NAME'],
                 PartNumber=index,
                 UploadId=self.response['UploadId'],
-                body=file.read(part_size)
+                Body=file.read(part_size)
             )
             self.parts.append({'PartNumber': index, 'ETag': self.response['ETag']})
             print(f"Uploaded part {index} of {nparts}")
