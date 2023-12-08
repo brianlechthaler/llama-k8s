@@ -8,7 +8,7 @@ class Uploader:
             's3',
             aws_access_key_id=environ['AWS_ACCESS_KEY_ID'],
             aws_secret_access_key=environ['AWS_SECRET_ACCESS_KEY'],
-            endpoint_url=environ['ENDPOINT_URL'],
+            endpoint_url=f"https://object.{environ['BUCKET_REGION']}.coreweave.com",
             region_name='default'
             )
 
