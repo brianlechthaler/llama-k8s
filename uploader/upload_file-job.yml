@@ -11,7 +11,7 @@ spec:
         imagePullPolicy: Always
         volumeMounts:
           - name: model-storage
-            mountPath: /var/model
+            mountPath: /opt/model
         resources:
           limits:
             cpu: 8
