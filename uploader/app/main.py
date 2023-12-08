@@ -39,5 +39,7 @@ class Uploader:
 
 
 if __name__ == '__main__':
+    print("Initializing uploader...")
     runtime = Uploader()
+    print(f"Uploader initialized. Now performing action: {environ['OPERATION']}")
     runtime.cli_handler(environ['OPERATION'])
