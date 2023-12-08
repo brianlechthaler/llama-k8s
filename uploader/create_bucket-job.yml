@@ -33,8 +33,6 @@ spec:
                 key: secretKey
           - name: OPERATION
             value: "create_bucket"
-        command: ["python"]
-        args: ["main.py","mb","--endpoint-url=https://object.$(BUCKET_REGION).coreweave.com","s3://$(BUCKET_NAME)"]
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
