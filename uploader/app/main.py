@@ -32,7 +32,7 @@ class Uploader:
                 Bucket=environ['BUCKET_NAME'],
                 Key=environ['FILE_NAME'],
                 PartNumber=index,
-                UploadId=environ['UPLOAD_ID'],
+                UploadId=self.response['UploadId'],
                 body=file.read(part_size)
             )
             self.parts.append({'PartNumber': index, 'ETag': self.response['ETag']})
