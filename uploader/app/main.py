@@ -23,7 +23,8 @@ class Uploader:
     def multipart_upload(self):
         self.response = self.s3_client.create_multipart_upload(Bucket=environ['BUCKET_NAME'],
                                                                Key=environ['FILE_NAME'])
-        print(f"Created Upload ID: {self.response['UploadId']}")
+        upload_id = self.response['UploadId']
+        print(f"Created Upload ID: {upload_id}")
         part_size = 256 * 1024 * 1024
         file = open(environ['FILE_PATH'], "rb")
         nparts = getsize(environ['FILE_PATH'])
@@ -32,14 +33,14 @@ class Uploader:
                 Bucket=environ['BUCKET_NAME'],
                 Key=environ['FILE_NAME'],
                 PartNumber=index,
-                UploadId=self.response['UploadId'],
+                UploadId=upload_id,
                 Body=file.read(part_size)
             )
             self.parts.append({'PartNumber': index, 'ETag': self.response['ETag']})
             print(f"Uploaded part {index} of {nparts}")
         self.s3_client.complete_multipart_upload(Bucket=environ['BUCKET_NAME'],
                                                  Key=environ['FILE_NAME'],
-                                                 UploadId=self.response['UploadId'],
+                                                 UploadId=upload_id,
                                                  MultipartUpload={'Parts': self.parts}
                                                  )
         print('Upload complete.')
