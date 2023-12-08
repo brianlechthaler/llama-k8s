@@ -13,9 +13,9 @@ spec:
           - name: model-storage
             mountPath: /opt/model
         resources:
-          limits:
-            cpu: 8
-            memory: 16Gi
+          requests:
+            cpu: 16
+            memory: 140Gi
         env:
           - name: BUCKET_NAME
             valueFrom:
