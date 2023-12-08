@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: upload-model
+spec:
+  template:
+    spec:
+      containers:
+      - name: upload-model
+        image: ghcr.io/brianlechthaler/llama-k8s/uploader:main
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: model-storage
+            mountPath: /var/model
+        resources:
+          limits:
+            cpu: 8
+            memory: 16Gi
+        env:
+          - name: BUCKET_NAME
+            valueFrom:
+              secretKeyRef:
+                name: s3-bucket
+                key: name
+          - name: BUCKET_REGION
+            value: "las1"
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: s3-full-secret
+                key: accessKey
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: s3-full-secret
+                key: secretKey
+          - name: OPERATION
+            value: "upload_file"
+          - name: FILE_PATH
+            value: "/opt/model/ggml-model-f16.gguf"
+          - name: FILE_NAME
+            value: "ggml-model-f16.gguf"
+      volumes:
+        - name: model-storage
+          persistentVolumeClaim:
+            claimName: model-storage-claim
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/region
+                operator: In
+                values:
+                  - LAS1
+      restartPolicy: OnFailure
+  backoffLimit: 10
