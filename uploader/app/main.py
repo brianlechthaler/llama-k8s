@@ -39,7 +39,7 @@ class Uploader:
             print(f"Uploaded part {index} of {nparts}")
         self.s3_client.complete_multipart_upload(Bucket=environ['BUCKET_NAME'],
                                                  Key=environ['FILE_NAME'],
-                                                 UploadId=environ['UPLOAD_ID'],
+                                                 UploadId=self.response['UploadId'],
                                                  MultipartUpload={'Parts': self.parts}
                                                  )
         print('Upload complete.')
