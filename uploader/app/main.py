@@ -21,7 +21,7 @@ class Uploader:
         print(f"Bucket created: {self.response}")
 
     def multipart_upload(self):
-        self.response = self.s3_client.multipart_upload(Bucket=environ['BUCKET_NAME'],
+        self.response = self.s3_client.create_multipart_upload(Bucket=environ['BUCKET_NAME'],
                                                         Key=environ['FILE_NAME'])
         print(f"Created Upload ID: {self.response['UploadId']}")
         part_size = 256 * 1024 * 1024
