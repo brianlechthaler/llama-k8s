@@ -11,23 +11,24 @@ class Uploader:
             endpoint_url=f"https://object.{environ['BUCKET_REGION']}.coreweave.com",
             region_name='default'
             )
+        self.response = None
 
     def create_bucket(self):
         print(f"Creating bucket with name {environ['BUCKET_NAME']}...")
-        response = self.s3_client.create_bucket(Bucket=environ['BUCKET_NAME'])
-        print(f"Bucket created: {response}")
+        self.response = self.s3_client.create_bucket(Bucket=environ['BUCKET_NAME'])
+        print(f"Bucket created: {self.response}")
 
     def upload_file(self):
         print(f"Opening file at path {environ['FILE_PATH']}...")
         file = open(environ['FILE_PATH'], 'rb')
         print(f"File opened. Uploading...")
-        response = self.s3_client.put_object(
+        self.response = self.s3_client.put_object(
             Bucket=environ['BUCKET_NAME'],
             Key=environ['FILE_NAME'],
             Body=file,
             ACL='private'
         )
-        print(f"Uploaded file: {response}")
+        print(f"Uploaded file: {self.response}")
 
     def cli_handler(self, operation):
         if operation == 'create_bucket':
