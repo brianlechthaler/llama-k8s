@@ -1,6 +1,7 @@
 from boto3 import client
 from os import environ
 from os.path import getsize
+from math import ceil
 
 
 class Uploader:
@@ -27,7 +28,7 @@ class Uploader:
         print(f"Created Upload ID: {upload_id}")
         part_size = 256 * 1024 * 1024
         file = open(environ['FILE_PATH'], "rb")
-        nparts = getsize(environ['FILE_PATH'])
+        nparts = ceil(getsize(environ['FILE_PATH']) / part_size)
         for index in range(1, nparts+1):
             self.response = self.s3_client.upload_part(
                 Bucket=environ['BUCKET_NAME'],
