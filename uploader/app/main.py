@@ -13,17 +13,20 @@ class Uploader:
             )
 
     def create_bucket(self):
+        print("Creating bucket...")
         response = self.s3_client.create_bucket(Bucket=environ['BUCKET_NAME'])
         print(f"Bucket created: {response}")
 
     def upload_file(self):
-        with open(environ['FILE_PATH'], 'rb') as file:
-            response = self.s3_client.put_object(
-                Bucket=environ['BUCKET_NAME'],
-                Key=environ['FILE_NAME'],
-                Body=file,
-                ACL='private'
-            )
+        print("Opening file...")
+        file = open(environ['FILE_PATH'], 'rb')
+        print("File opened. Uploading...")
+        response = self.s3_client.put_object(
+            Bucket=environ['BUCKET_NAME'],
+            Key=environ['FILE_NAME'],
+            Body=file,
+            ACL='private'
+        )
         print(f"Uploaded file: {response}")
 
     def cli_handler(self, operation):
