@@ -1,5 +1,6 @@
 from boto3 import client
 from os import environ
+from os.path import getsize
 
 
 class Uploader:
@@ -12,29 +13,42 @@ class Uploader:
             region_name='default'
             )
         self.response = None
+        self.parts = []
 
     def create_bucket(self):
         print(f"Creating bucket with name {environ['BUCKET_NAME']}...")
         self.response = self.s3_client.create_bucket(Bucket=environ['BUCKET_NAME'])
         print(f"Bucket created: {self.response}")
 
-    def upload_file(self):
-        print(f"Opening file at path {environ['FILE_PATH']}...")
-        file = open(environ['FILE_PATH'], 'rb')
-        print(f"File opened. Uploading...")
-        self.response = self.s3_client.put_object(
-            Bucket=environ['BUCKET_NAME'],
-            Key=environ['FILE_NAME'],
-            Body=file,
-            ACL='private'
-        )
-        print(f"Uploaded file: {self.response}")
+    def multipart_upload(self):
+        self.response = self.s3_client.multipart_upload(Bucket=environ['BUCKET_NAME'],
+                                                        Key=environ['FILE_NAME'])
+        print(f"Created Upload ID: {self.response['UploadId']}")
+        part_size = 256 * 1024 * 1024
+        file = open(environ['FILE_PATH'], "rb")
+        nparts = getsize(environ['FILE_PATH'])
+        for index in range(1, nparts+1):
+            self.response = self.s3_client.upload_part(
+                Bucket=environ['BUCKET_NAME'],
+                Key=environ['FILE_NAME'],
+                PartNumber=index,
+                UploadId=environ['UPLOAD_ID'],
+                body=file.read(part_size)
+            )
+            self.parts.append({'PartNumber': index, 'ETag': self.response['ETag']})
+            print(f"Uploaded part {index} of {nparts}")
+        self.s3_client.complete_multipart_upload(Bucket=environ['BUCKET_NAME'],
+                                                 Key=environ['FILE_NAME'],
+                                                 UploadId=environ['UPLOAD_ID'],
+                                                 MultipartUpload={'Parts': self.parts}
+                                                 )
+        print('Upload complete.')
 
     def cli_handler(self, operation):
         if operation == 'create_bucket':
             self.create_bucket()
         if operation == 'upload_file':
-            self.upload_file()
+            self.multipart_upload()
         if operation not in ['create_bucket', 'upload_file']:
             raise Exception("Invalid operation or no operation specified.")
 
