@@ -17,7 +17,7 @@ class Uploader:
         print(f"Bucket created: {response}")
 
     def upload_file(self):
-        with open(environ(['FILE_PATH'])) as file:
+        with open(environ['FILE_PATH']) as file:
             response = client.put_object(
                 Bucket=environ['BUCKET_NAME'],
                 Key=environ['FILE_NAME'],
