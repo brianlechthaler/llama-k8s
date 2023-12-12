@@ -58,10 +58,12 @@ class InferMixins:
             region_name='default'
             )
         file = open('/var/model/ggml-model-f16.gguf', 'wb')
+        self.log("Downloading model...")
         response = self.s3_client.download_fileobj(environ['BUCKET_NAME'],
                                                    environ['FILE_NAME'],
                                                    file,
                                                    Config=config)
+        self.log("Model downloaded.")
         print(response)
 
 
