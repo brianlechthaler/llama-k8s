@@ -3,9 +3,13 @@ from os import environ
 from flask import Flask, request
 from boto3 import client
 from boto3.s3.transfer import TransferConfig
+from datetime import datetime
 
 
 class InferMixins:
+    def log(self, message: str = ''):
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {message}")
+
     def load_model(self, model_path: str = '/var/model/ggml-model-f16.gguf', gpu: bool = True):
         self.ngpu = 0
         if gpu is True:
@@ -75,10 +79,10 @@ infer = InferMain()
 
 @app.route('/', methods=['POST'])
 def serve_buffer():
-    app.logger.info(f"Running prompt: {request.form.get('prompt')}")
+    infer.log(f"Running prompt: {request.form.get('prompt')}")
     infer.run_prompt(request.form.get('prompt'))
     generated_text = infer.stream_to_buffer()
-    app.logger.info(f"Generated text: {generated_text}")
+    infer.log(f"Generated text: {generated_text}")
     return generated_text
 
 
