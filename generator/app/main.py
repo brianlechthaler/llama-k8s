@@ -2,6 +2,7 @@ from llama_cpp import Llama
 from os import environ
 from flask import Flask, request
 from boto3 import client
+from boto3.s3.transfer import TransferConfig
 
 
 class InferMixins:
@@ -39,6 +40,12 @@ class InferMixins:
         return buffer
 
     def download_model(self):
+        config = TransferConfig(
+            multipart_threshold=1024 * 1024,
+            max_concurrency=8,
+            multipart_chunksize=1024 * 1024,
+            use_threads=True
+        )
         self.s3_client = client(
             's3',
             aws_access_key_id=environ['AWS_ACCESS_KEY_ID'],
@@ -49,7 +56,8 @@ class InferMixins:
         file = open('/var/model/ggml-model-f16.gguf', 'wb')
         response = self.s3_client.download_fileobj(environ['BUCKET_NAME'],
                                                    environ['FILE_NAME'],
-                                                   file)
+                                                   file,
+                                                   Config=config)
         print(response)
 
 
