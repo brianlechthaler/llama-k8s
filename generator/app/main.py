@@ -1,6 +1,7 @@
 from llama_cpp import Llama
 from os import environ
 from flask import Flask, request
+from boto3 import client
 
 
 class InferMixins:
@@ -37,11 +38,26 @@ class InferMixins:
         print(f"Generated {ntoken} Tokens")
         return buffer
 
+    def download_model(self):
+        self.s3_client = client(
+            's3',
+            aws_access_key_id=environ['AWS_ACCESS_KEY_ID'],
+            aws_secret_access_key=environ['AWS_SECRET_ACCESS_KEY'],
+            endpoint_url=f"https://accel-object.{environ['BUCKET_REGION']}.coreweave.com",
+            region_name='default'
+            )
+        file = open('/var/model/ggml-model-f16.gguf', 'wb')
+        response = self.s3_client.download_fileobj(environ['BUCKET_NAME'],
+                                                   environ['FILE_NAME'],
+                                                   file)
+        print(response)
+
 
 class InferMain(InferMixins):
     def __init__(self,
                  model_path: str = '/var/model/ggml-model-f16.gguf',
                  gpu: bool = True):
+        self.download_model()
         self.load_model(model_path, gpu)
 
 

@@ -27,6 +27,20 @@ spec:
               value: "8080"
             - name: EXEC_PORT
               value: "8080"
+            - name: BUCKET_REGION
+              value: "las1"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: s3-full-secret
+                  key: accessKey
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: s3-full-secret
+                  key: secretKey
+            - name: FILE_NAME
+              value: "ggml-model-f16.gguf"
           resources:
             limits:
               cpu: 8
