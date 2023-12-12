@@ -11,9 +11,9 @@ spec:
       app: generator-a100
   template:
     metadata:
-      name: generator-a100
+      name: generator-a100-nvlink
       labels:
-        app: generator-a100
+        app: generator-a100-nvlink
     spec:
       containers:
         - name: generator
