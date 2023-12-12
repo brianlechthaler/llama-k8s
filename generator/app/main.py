@@ -43,13 +43,15 @@ class InferMixins:
         print(f"Generated {ntoken} Tokens")
         return buffer
 
-    def download_model(self):
-        config = TransferConfig(
+    def create_xfer_config(self):
+        return TransferConfig(
             multipart_threshold=1024 * 1024 * 512,
             max_concurrency=32,
             multipart_chunksize=1024 * 1024 * 512,
             use_threads=True
         )
+
+    def download_model(self):
         self.s3_client = client(
             's3',
             aws_access_key_id=environ['AWS_ACCESS_KEY_ID'],
@@ -62,7 +64,7 @@ class InferMixins:
         response = self.s3_client.download_fileobj(environ['BUCKET_NAME'],
                                                    environ['FILE_NAME'],
                                                    file,
-                                                   Config=config)
+                                                   Config=self.create_xfer_config())
         self.log("Model downloaded.")
         print(response)
 
