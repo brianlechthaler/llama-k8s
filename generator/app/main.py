@@ -46,7 +46,7 @@ class InferMixins:
     def download_model(self):
         config = TransferConfig(
             multipart_threshold=1024 * 1024 * 512,
-            max_concurrency=8,
+            max_concurrency=32,
             multipart_chunksize=1024 * 1024 * 512,
             use_threads=True
         )
