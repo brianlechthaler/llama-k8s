@@ -11,11 +11,14 @@ class InferMixins:
         print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {message}")
 
     def load_model(self, model_path: str = '/var/model/ggml-model-f16.gguf', gpu: bool = True):
+
         self.ngpu = 0
         if gpu is True:
             self.ngpu = -1
+        self.log(f"Loading model from {model_path}...")
         self.model = Llama(model_path=model_path,
                            n_gpu_layers=self.ngpu)
+        self.log("Model loaded.")
 
     def run_prompt(self, prompt: str = 'Name the planets in the solar system?'):
         self.output = self.model(f"Q: {prompt} A: ",
