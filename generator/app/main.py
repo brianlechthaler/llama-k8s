@@ -51,7 +51,7 @@ class InferMixins:
             use_threads=True
         )
 
-    def download_model(self):
+    def create_s3_client(self):
         self.s3_client = client(
             's3',
             aws_access_key_id=environ['AWS_ACCESS_KEY_ID'],
@@ -59,6 +59,9 @@ class InferMixins:
             endpoint_url=f"https://accel-object.{environ['BUCKET_REGION']}.coreweave.com",
             region_name='default'
             )
+
+    def download_model(self):
+
         file = open('/var/model/ggml-model-f16.gguf', 'wb')
         self.log("Downloading model...")
         response = self.s3_client.download_fileobj(environ['BUCKET_NAME'],
