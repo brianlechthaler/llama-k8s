@@ -42,7 +42,7 @@ spec:
             limits:
               cpu: 8
               memory: 16Gi
-              nvidia.com/gpu: 3
+              nvidia.com/gpu: 2
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
