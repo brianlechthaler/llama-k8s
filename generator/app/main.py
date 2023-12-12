@@ -61,7 +61,7 @@ class InferMixins:
             )
 
     def download_model(self):
-
+        self.create_s3_client()
         file = open('/var/model/ggml-model-f16.gguf', 'wb')
         self.log("Downloading model...")
         response = self.s3_client.download_fileobj(environ['BUCKET_NAME'],
