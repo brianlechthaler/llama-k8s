@@ -19,9 +19,6 @@ spec:
         - name: generator
           image: ghcr.io/brianlechthaler/llama-k8s/generator:main
           imagePullPolicy: Always
-          volumeMounts:
-            - name: model-storage
-              mountPath: /var/model
           env:
             - name: APP_PORT
               value: "8080"
@@ -51,10 +48,6 @@ spec:
               cpu: 8
               memory: 16Gi
               nvidia.com/gpu: 3
-      volumes:
-        - name: model-storage
-          persistentVolumeClaim:
-            claimName: model-storage-claim
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
