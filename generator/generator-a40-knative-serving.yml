@@ -1,0 +1,60 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: generator-a40
+  labels:
+    app: generator-a40
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "3"
+    spec:
+      containerConcurrency: 1
+      containers:
+        - name: generator
+          image: ghcr.io/brianlechthaler/llama-k8s/generator:main
+          imagePullPolicy: Always
+          env:
+            - name: APP_PORT
+              value: "8080"
+            - name: EXEC_PORT
+              value: "8080"
+            - name: BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: s3-bucket
+                  key: name
+            - name: BUCKET_REGION
+              value: "las1"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: s3-full-secret
+                  key: accessKey
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: s3-full-secret
+                  key: secretKey
+            - name: FILE_NAME
+              value: "ggml-model-f16.gguf"
+          resources:
+            limits:
+              cpu: 32
+              memory: 64Gi
+              nvidia.com/gpu: 3
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: topology.kubernetes.io/region
+                    operator: In
+                    values:
+                      - LAS1
+                  - key: gpu.nvidia.com/class
+                    operator: In
+                    values:
+                      - A40
