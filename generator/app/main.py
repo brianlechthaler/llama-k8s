@@ -48,9 +48,9 @@ class InferMixins:
 
     def create_xfer_config(self):
         return TransferConfig(
-            multipart_threshold=1024 * 1024 * 1024 * 4,
-            max_concurrency=32,
-            multipart_chunksize=1024 * 1024 * 1024 * 4,
+            multipart_threshold=1024 * 1024 * 1024 * 8,
+            max_concurrency=4,
+            multipart_chunksize=1024 * 1024 * 1024 * 8,
             use_threads=True
         )
 

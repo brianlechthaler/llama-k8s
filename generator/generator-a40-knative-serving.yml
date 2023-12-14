@@ -42,8 +42,8 @@ spec:
               value: "ggml-model-f16.gguf"
           resources:
             limits:
-              cpu: 32
-              memory: 128Gi
+              cpu: 8
+              memory: 32Gi
               nvidia.com/gpu: 3
       affinity:
         nodeAffinity:
