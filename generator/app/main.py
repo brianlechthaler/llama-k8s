@@ -1,6 +1,6 @@
 from llama_cpp import Llama
 from os import environ
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from boto3 import client
 from boto3.s3.transfer import TransferConfig
 from datetime import datetime
@@ -35,7 +35,7 @@ class InferMixins:
 
     def stream_output(self):
         for token in self.output:
-            yield token
+            yield jsonify(token)
 
     def stream_to_buffer(self):
         buffer = ''
