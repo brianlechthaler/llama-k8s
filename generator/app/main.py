@@ -97,6 +97,7 @@ def serve_buffer():
 
 @app.route('/stream', methods=['POST'])
 def serve_stream():
+    infer.run_prompt(request.form.get('prompt'))
     return infer.stream_output(), {'Content-Type': 'application/json'}
 
 
