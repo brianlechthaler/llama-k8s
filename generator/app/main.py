@@ -35,7 +35,7 @@ class InferMixins:
 
     def stream_output(self):
         for token in self.output:
-            self.print_token(token)
+            yield token
 
     def stream_to_buffer(self):
         buffer = ''
@@ -87,13 +87,17 @@ infer = InferMain()
 app = Flask(__name__)
 
 
-@app.route('/', methods=['POST'])
+@app.route('/buffer', methods=['POST'])
 def serve_buffer():
     infer.log(f"Running prompt: {request.form.get('prompt')}")
     infer.run_prompt(request.form.get('prompt'))
     generated_text = infer.stream_to_buffer()
     infer.log(f"Generated text: {generated_text}")
     return generated_text
+
+@app.route('/stream', methods=['POST'])
+def serve_stream():
+    return infer.stream_output(), {'Content-Type': 'application/json'}
 
 
 if __name__ == '__main__':
