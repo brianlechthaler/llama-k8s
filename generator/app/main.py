@@ -83,8 +83,14 @@ class InferMain(InferMixins):
         self.load_model(model_path, gpu)
 
 
-infer = InferMain()
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    with app.app_context():
+        infer = InferMain()
+    return app, infer
+
+
+app, infer = create_app()
 
 
 @app.route('/buffer', methods=['POST'])
