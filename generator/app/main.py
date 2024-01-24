@@ -1,6 +1,6 @@
 from llama_cpp import Llama
 from os import environ
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from boto3 import client
 from boto3.s3.transfer import TransferConfig
 from datetime import datetime
@@ -35,7 +35,7 @@ class InferMixins:
 
     def stream_output(self):
         for token in self.output:
-            yield jsonify(token)
+            self.print_token(token)
 
     def stream_to_buffer(self):
         buffer = ''
@@ -83,28 +83,17 @@ class InferMain(InferMixins):
         self.load_model(model_path, gpu)
 
 
-def create_app():
-    app = Flask(__name__)
-    with app.app_context():
-        infer = InferMain()
-    return app, infer
+infer = InferMain()
+app = Flask(__name__)
 
 
-app, infer = create_app()
-
-
-@app.route('/buffer', methods=['POST'])
+@app.route('/', methods=['POST'])
 def serve_buffer():
     infer.log(f"Running prompt: {request.form.get('prompt')}")
     infer.run_prompt(request.form.get('prompt'))
     generated_text = infer.stream_to_buffer()
     infer.log(f"Generated text: {generated_text}")
     return generated_text
-
-@app.route('/stream', methods=['POST'])
-def serve_stream():
-    infer.run_prompt(request.form.get('prompt'))
-    return infer.stream_output(), {'Content-Type': 'application/json'}
 
 
 if __name__ == '__main__':
