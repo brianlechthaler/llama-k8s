@@ -50,7 +50,7 @@ class InferMixins:
         for token in self.output:
             buffer += self.extract_outupt(token)
             ntoken += 1
-        print(f"Generated {ntoken} Tokens")
+        self.log(f"Generated {ntoken} Tokens")
         return buffer
 
     def create_xfer_config(self):
@@ -81,7 +81,7 @@ class InferMixins:
                                                    Config=self.create_xfer_config())
         self.timer_end()
         self.log(f"Model downloaded. Time elapsed: {self.timer_end}.")
-        print(response)
+        self.log(response)
 
 
 class InferMain(InferMixins):
