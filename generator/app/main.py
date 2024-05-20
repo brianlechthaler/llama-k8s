@@ -81,7 +81,7 @@ class InferMixins:
                                                    environ['FILE_NAME'],
                                                    file,
                                                    Config=self.create_xfer_config())
-        self.timer_end()
+        self.timer_stop()
         self.log(f"Model downloaded. Time elapsed: {self.timer_end}.")
         self.log(response)
 
