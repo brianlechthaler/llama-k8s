@@ -8,7 +8,7 @@ from datetime import datetime
 
 class InferMixins:
     def log(self, message: str = ''):
-        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {message}")
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {message}", flush=True)
 
     def load_model(self, model_path: str = '/var/model/ggml-model-f16.gguf', gpu: bool = True):
 
