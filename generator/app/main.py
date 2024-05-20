@@ -9,6 +9,11 @@ from datetime import datetime
 class InferMixins:
     def log(self, message: str = ''):
         print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {message}", flush=True)
+    def timer_start(self):
+        self.timer_begin = datetime.now()
+    def timer_stop(self):
+        self.timer_end = datetime.now()
+        self.timer_duration = self.timer_end - self.timer_begin
 
     def load_model(self, model_path: str = '/var/model/ggml-model-f16.gguf', gpu: bool = True):
 
