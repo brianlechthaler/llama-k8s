@@ -47,10 +47,12 @@ class InferMixins:
     def stream_to_buffer(self):
         buffer = ''
         ntoken = 0
+        self.timer_start()
         for token in self.output:
             buffer += self.extract_outupt(token)
             ntoken += 1
-        self.log(f"Generated {ntoken} Tokens")
+        self.timer_end()
+        self.log(f"Generated {ntoken} Tokens. Time elapsed: {self.timer_duration}")
         return buffer
 
     def create_xfer_config(self):
