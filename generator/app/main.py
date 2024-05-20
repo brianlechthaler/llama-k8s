@@ -25,7 +25,7 @@ class InferMixins:
         self.model = Llama(model_path=model_path,
                            n_gpu_layers=self.ngpu)
         self.timer_stop()
-        self.log(f"Model loaded. Time elapsed: {self.timer_end}.")
+        self.log(f"Model loaded. Time elapsed: {self.timer_duration}.")
 
     def run_prompt(self, prompt: str = 'Name the planets in the solar system?'):
         self.output = self.model(f"Q: {prompt} A: ",
@@ -82,7 +82,7 @@ class InferMixins:
                                                    file,
                                                    Config=self.create_xfer_config())
         self.timer_stop()
-        self.log(f"Model downloaded. Time elapsed: {self.timer_end}.")
+        self.log(f"Model downloaded. Time elapsed: {self.timer_duration}.")
         self.log(response)
 
 
