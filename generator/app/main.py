@@ -21,9 +21,11 @@ class InferMixins:
         if gpu is True:
             self.ngpu = -1
         self.log(f"Loading model from {model_path}...")
+        self.timer_start()
         self.model = Llama(model_path=model_path,
                            n_gpu_layers=self.ngpu)
-        self.log("Model loaded.")
+        self.timer_stop()
+        self.log(f"Model loaded. Time elapsed: {self.timer_end}.")
 
     def run_prompt(self, prompt: str = 'Name the planets in the solar system?'):
         self.output = self.model(f"Q: {prompt} A: ",
@@ -72,11 +74,13 @@ class InferMixins:
         self.create_s3_client()
         file = open('/var/model/ggml-model-f16.gguf', 'wb')
         self.log("Downloading model...")
+        self.timer_start()
         response = self.s3_client.download_fileobj(environ['BUCKET_NAME'],
                                                    environ['FILE_NAME'],
                                                    file,
                                                    Config=self.create_xfer_config())
-        self.log("Model downloaded.")
+        self.timer_end()
+        self.log(f"Model downloaded. Time elapsed: {self.timer_end}.")
         print(response)
 
 
