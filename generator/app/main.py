@@ -51,7 +51,7 @@ class InferMixins:
         for token in self.output:
             buffer += self.extract_outupt(token)
             ntoken += 1
-        self.timer_end()
+        self.timer_stop()
         self.log(f"Generated {ntoken} Tokens. Time elapsed: {self.timer_duration}")
         return buffer
 
